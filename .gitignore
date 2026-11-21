@@ -1,0 +1,21 @@
+# Build directories
+build/
+bin/
+*.o
+*.a
+*.so
+*.dylib
+*.out
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Benchmark / test output logs
+*.log
+*.profdata
+*.profraw

@@ -32,11 +32,16 @@ if (ENABLE_TSAN)
     add_link_options(-fsanitize=thread)
 endif()
 
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
+
 # Core Library
 add_library(matching_engine STATIC
     src/order_book.cpp
     src/engine.cpp
 )
+target_link_libraries(matching_engine PUBLIC Threads::Threads)
 
 target_include_directories(matching_engine PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

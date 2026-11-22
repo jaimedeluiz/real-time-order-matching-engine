@@ -1,6 +1,6 @@
 CXX ?= clang++
-CXXFLAGS = -std=c++20 -O3 -Wall -Wextra -Wpedantic -Iinclude -I.
-LDFLAGS =
+CXXFLAGS = -std=c++20 -O3 -Wall -Wextra -Wpedantic -pthread -Iinclude -I.
+LDFLAGS = -pthread
 
 ifeq ($(ASAN),1)
     CXXFLAGS += -fsanitize=address,undefined -fno-omit-frame-pointer -g

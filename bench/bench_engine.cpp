@@ -230,7 +230,7 @@ void bench_mixed_workload(size_t n = 1000000) {
             latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
             active_ids.push_back(id);
 
-        } else if (action <= 85) {
+        } else if (action <= 85 && !active_ids.empty()) {
             // Cancel active order (25%)
             size_t idx = rng() % active_ids.size();
             OrderId cid = active_ids[idx];
@@ -266,7 +266,7 @@ void bench_mixed_workload(size_t n = 1000000) {
 
             latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
 
-        } else {
+        } else if (!active_ids.empty()) {
             // Modify order (5%)
             size_t idx = rng() % active_ids.size();
             OrderId mid = active_ids[idx];
@@ -277,6 +277,23 @@ void bench_mixed_workload(size_t n = 1000000) {
             auto t1 = std::chrono::high_resolution_clock::now();
 
             latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
+        } else {
+            // Fallback limit order if book is dry
+            OrderId id = next_id++;
+            Order order{
+                .id = id,
+                .symbol = sym,
+                .side = Side::Buy,
+                .type = OrderType::Limit,
+                .price = mid_price - 5,
+                .initial_quantity = 50,
+                .trader_id = "T"
+            };
+            auto t0 = std::chrono::high_resolution_clock::now();
+            engine.submit_order(order);
+            auto t1 = std::chrono::high_resolution_clock::now();
+            latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
+            active_ids.push_back(id);
         }
     }
 

@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
             // Cancel an active order
             size_t idx = rng() % active_order_ids.size();
             uint64_t cancel_id = active_order_ids[idx];
-            active_order_ids.erase(active_order_ids.begin() + idx);
+            active_order_ids.erase(active_order_ids.begin() + static_cast<ptrdiff_t>(idx));
             std::cout << "CANCEL id=" << cancel_id << "\n";
 
         } else if (!active_order_ids.empty()) {

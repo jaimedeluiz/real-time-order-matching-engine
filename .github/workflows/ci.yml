@@ -27,19 +27,20 @@ jobs:
       - name: Build and Run Tests (Release -O3)
         run: |
           make clean
-          make test -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+          make test
 
       - name: Run AddressSanitizer & UBSan Tests
         run: |
           make clean
-          make test ASAN=1 -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+          make test ASAN=1
 
       - name: Run Benchmarks
         run: |
+          make clean
           make bench
 
       - name: Verify CMake Build
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --config Release
-          ctest --test-dir build --output-on-failure
+          cmake -B build-cmake -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-cmake --config Release
+          ctest --test-dir build-cmake --output-on-failure

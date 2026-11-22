@@ -86,7 +86,7 @@ void bench_limit_order_insert(size_t n = 1000000) {
         engine.submit_order(order);
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+        latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
     }
 
     auto end_total = std::chrono::high_resolution_clock::now();
@@ -123,7 +123,7 @@ void bench_cancel_order(size_t n = 500000) {
         engine.cancel_order(i);
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+        latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
     }
 
     auto end_total = std::chrono::high_resolution_clock::now();
@@ -172,7 +172,7 @@ void bench_match_crossing(size_t n = 500000) {
         engine.submit_order(taker);
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+        latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
     }
 
     auto end_total = std::chrono::high_resolution_clock::now();
@@ -227,7 +227,7 @@ void bench_mixed_workload(size_t n = 1000000) {
             engine.submit_order(order);
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+            latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
             active_ids.push_back(id);
 
         } else if (action <= 85) {
@@ -241,7 +241,7 @@ void bench_mixed_workload(size_t n = 1000000) {
             engine.cancel_order(cid);
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+            latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
 
         } else if (action <= 95) {
             // Crossing Aggressive Order (10%)
@@ -264,7 +264,7 @@ void bench_mixed_workload(size_t n = 1000000) {
             engine.submit_order(order);
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+            latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
 
         } else {
             // Modify order (5%)
@@ -276,7 +276,7 @@ void bench_mixed_workload(size_t n = 1000000) {
             engine.modify_order(mid, new_qty);
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+            latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
         }
     }
 
@@ -303,7 +303,7 @@ void bench_spsc_queue(size_t n = 2000000) {
         queue.pop(popped);
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        latencies.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count());
+        latencies.push_back(static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()));
     }
 
     auto end_total = std::chrono::high_resolution_clock::now();

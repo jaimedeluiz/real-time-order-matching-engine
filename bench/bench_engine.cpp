@@ -8,6 +8,7 @@
 #include <numeric>
 #include <iomanip>
 #include <random>
+#include <memory>
 
 using namespace matching;
 
@@ -304,7 +305,8 @@ void bench_mixed_workload(size_t n = 1000000) {
 }
 
 void bench_spsc_queue(size_t n = 2000000) {
-    SPSCQueue<Order, 131072> queue;
+    auto queue_ptr = std::make_unique<SPSCQueue<Order, 65536>>();
+    auto& queue = *queue_ptr;
 
     std::vector<uint64_t> latencies;
     latencies.reserve(n);

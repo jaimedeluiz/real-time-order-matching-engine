@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os }} (${{ matrix.cxx }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        cxx: [g++, clang++]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up C++ compiler
+        run: |
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+      - name: Build and Run Tests (Release -O3)
+        run: |
+          make clean
+          make test -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+      - name: Run AddressSanitizer & UBSan Tests
+        run: |
+          make clean
+          make test ASAN=1 -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+      - name: Run Benchmarks
+        run: |
+          make bench
+
+      - name: Verify CMake Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+          ctest --test-dir build --output-on-failure

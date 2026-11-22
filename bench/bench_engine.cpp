@@ -331,7 +331,12 @@ void bench_spsc_queue(size_t n = 2000000) {
 
 } // namespace
 
-int main() {
+int main(int argc, char* argv[]) {
+    size_t div = 1;
+    if (argc > 1 && (std::string(argv[1]) == "--quick" || std::string(argv[1]) == "-q")) {
+        div = 10;
+    }
+
     std::cout << "\n========================================================================================================\n";
     std::cout << "                                  MATCHING ENGINE PERFORMANCE BENCHMARK                                  \n";
     std::cout << "========================================================================================================\n";
@@ -347,11 +352,11 @@ int main() {
               << "\n";
     std::cout << "--------------------------------------------------------------------------------------------------------\n";
 
-    bench_limit_order_insert(1000000);
-    bench_cancel_order(500000);
-    bench_match_crossing(500000);
-    bench_mixed_workload(1000000);
-    bench_spsc_queue(2000000);
+    bench_limit_order_insert(1000000 / div);
+    bench_cancel_order(500000 / div);
+    bench_match_crossing(500000 / div);
+    bench_mixed_workload(1000000 / div);
+    bench_spsc_queue(2000000 / div);
 
     std::cout << "========================================================================================================\n\n";
     return 0;

@@ -45,22 +45,22 @@ $(BUILD_DIR)/tests/%.o: tests/%.cpp | dirs
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(CLI_BIN): $(LIB_OBJS) $(CLI_SRC) | dirs
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(CLI_SRC) $(LIB_OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(CLI_SRC) $(LIB_OBJS) $(LDFLAGS) -o $@
 
 $(GEN_BIN): $(GEN_SRC) | dirs
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(GEN_SRC) -o $@
+	$(CXX) $(CXXFLAGS) $(GEN_SRC) $(LDFLAGS) -o $@
 
 $(TEST_BIN): $(LIB_OBJS) $(TEST_OBJS) | dirs
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(TEST_OBJS) $(LIB_OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(TEST_OBJS) $(LIB_OBJS) $(LDFLAGS) -o $@
 
 $(BENCH_BIN): $(LIB_OBJS) $(BENCH_SRC) | dirs
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(BENCH_SRC) $(LIB_OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(BENCH_SRC) $(LIB_OBJS) $(LDFLAGS) -o $@
 
 test: $(TEST_BIN)
 	@./$(TEST_BIN)
 
 bench: $(BENCH_BIN)
-	@./$(BENCH_BIN)
+	@./$(BENCH_BIN) $(BENCH_ARGS)
 
 run-cli: $(CLI_BIN)
 	@./$(CLI_BIN)

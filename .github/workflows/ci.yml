@@ -37,7 +37,7 @@ jobs:
       - name: Run Benchmarks
         run: |
           make clean
-          make bench
+          make bench BENCH_ARGS="--quick"
 
       - name: Verify CMake Build
         run: |
